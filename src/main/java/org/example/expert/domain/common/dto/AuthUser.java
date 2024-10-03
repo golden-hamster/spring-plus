@@ -2,17 +2,59 @@ package org.example.expert.domain.common.dto;
 
 import lombok.Getter;
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
-public class AuthUser {
+public class AuthUser implements UserDetails {
 
     private final Long id;
     private final String email;
+    private final String password;
+    private final String nickname;
     private final UserRole userRole;
 
-    public AuthUser(Long id, String email, UserRole userRole) {
+    public AuthUser(Long id, String email, String password, String nickname, UserRole userRole) {
         this.id = id;
         this.email = email;
+        this.password = password;
+        this.nickname = nickname;
         this.userRole = userRole;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(userRole.name()));
+
+        if (userRole == UserRole.ROLE_ADMIN) {
+            authorities.add(new SimpleGrantedAuthority(UserRole.ROLE_USER.name()));
+        }
+
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {return password;}
+
+    @Override
+    public String getUsername() {return email;}
+
+    @Override
+    public boolean isAccountNonExpired() {return true;}
+
+    @Override
+    public boolean isAccountNonLocked() {return true;}
+
+    @Override
+    public boolean isCredentialsNonExpired() {return true;}
+
+    @Override
+    public boolean isEnabled() {return true;}
 }

@@ -10,7 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.expert.domain.user.enums.UserRole;
+import org.example.expert.domain.common.dto.AuthUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 
@@ -36,7 +39,6 @@ public class JwtFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-
         String bearerJwt = httpRequest.getHeader("Authorization");
 
         if (bearerJwt == null) {
@@ -55,21 +57,27 @@ public class JwtFilter implements Filter {
                 return;
             }
 
-            UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
+//            UserRole userRole = UserRole.valueOf(claims.get("userRole", String.class));
 
-            httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("email", claims.get("email"));
-            httpRequest.setAttribute("userRole", claims.get("userRole"));
+//            httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
+//            httpRequest.setAttribute("email", claims.get("email"));
+//            httpRequest.setAttribute("userRole", claims.get("userRole"));
 
-            if (url.startsWith("/admin")) {
-                // 관리자 권한이 없는 경우 403을 반환합니다.
-                if (!UserRole.ADMIN.equals(userRole)) {
-                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
-                    return;
-                }
-                chain.doFilter(request, response);
-                return;
-            }
+//            if (url.startsWith("/admin")) {
+//                // 관리자 권한이 없는 경우 403을 반환합니다.
+//                if (!UserRole.ADMIN.equals(userRole)) {
+//                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
+//                    return;
+//                }
+//                chain.doFilter(request, response);
+//                return;
+//            }
+
+            AuthUser authUser = jwtUtil.getAuthUserFromClaims(claims);
+
+            Authentication authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
 
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {

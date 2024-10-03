@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.ServerException;
 import org.example.expert.domain.user.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,5 +63,14 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public AuthUser getAuthUserFromClaims(Claims claims) {
+        long userId = Long.parseLong(claims.getSubject());
+        String email = claims.get("email", String.class);
+        String userRole = claims.get("userRole", String.class);
+        String nickname = claims.get("nickname", String.class);
+
+        return new AuthUser(userId, email, null, nickname, UserRole.valueOf(userRole));
     }
 }
