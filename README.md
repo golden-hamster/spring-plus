@@ -2,12 +2,10 @@
 
 
 ## 구조도
----
 ![spring-plus-아키텍쳐 drawio](https://github.com/user-attachments/assets/d50f885c-df93-41d3-b38b-f77617517c9b)
 
 
 ## 설정 화면
----
 
 ### EC2
 ![image](https://github.com/user-attachments/assets/adf641c0-a042-4249-8e85-863b81724d40)
@@ -26,7 +24,6 @@
 
 
 ## 성능 개선
----
 ![image](https://github.com/user-attachments/assets/cb6f90ca-4935-4383-b75f-f07b024c4beb)
 
 (제가 했던 파티셔닝은 큰 의미가 없었던 것 같습니다...:cry:)
