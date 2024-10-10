@@ -9,6 +9,7 @@ import org.example.expert.domain.auth.dto.response.SigninResponse;
 import org.example.expert.domain.auth.dto.response.SignupResponse;
 import org.example.expert.domain.auth.exception.AuthException;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.image.service.ImageService;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final ImageService imageService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -39,10 +41,11 @@ public class AuthService {
                 signupRequest.getEmail(),
                 encodedPassword,
                 signupRequest.getNickname(),
-                userRole
+                userRole,
+                signupRequest.getImageUrl()
         );
-        User savedUser = userRepository.save(newUser);
 
+        User savedUser = userRepository.save(newUser);
         String bearerToken = jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), savedUser.getNickname(), userRole);
 
         return new SignupResponse(bearerToken);

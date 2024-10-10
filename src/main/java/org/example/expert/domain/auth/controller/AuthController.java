@@ -18,7 +18,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/auth/signup")
-    public SignupResponse signup(@Valid @RequestBody SignupRequest signupRequest) {
+    public SignupResponse signup(
+            @Valid @RequestBody SignupRequest signupRequest) {
         return authService.signup(signupRequest);
     }
 

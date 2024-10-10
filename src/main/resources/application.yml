@@ -1,20 +1,34 @@
 spring:
+  profiles:
+    active: ${profile}
   application:
     name: expert
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: ${mysql_pw}
-    url: jdbc:mysql://localhost:3307/expert
     username: ${mysql_id}
+    password: ${mysql_pw}
+    url: ${db_url}
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-        format_sql: true
-        show_sql: true
-        use_sql_comments: true
+  flyway:
+    enabled: true
+    url: ${db_url}
+    user: ${mysql_id}
+    password: ${mysql_pw}
+    baseline-on-migrate: true
+cloud:
+  aws:
+    credentials:
+      access-key: ${aws_accessKey}
+      secret-key: ${aws_secretKey}
+    region:
+      static: ${aws_region}
+    s3:
+      bucket: ${aws_bucketName}
+    stack:
+      auto: false
 jwt:
   secret:
     key: ${jwt_secretKey}
