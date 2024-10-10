@@ -26,6 +26,11 @@ public class UserService {
         return new UserResponse(user.getId(), user.getEmail());
     }
 
+    public UserResponse searchUser(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
+        return new UserResponse(user.getId(), user.getEmail());
+    }
+
     @Transactional
     public void changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
         validateNewPassword(userChangePasswordRequest);
