@@ -18,11 +18,11 @@ public class Comment extends Timestamped {
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "none"), updatable = false, nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id", nullable = false)
+    @JoinColumn(name = "todo_id", foreignKey = @ForeignKey(name = "none"), updatable = false, nullable = false)
     private Todo todo;
 
     public Comment(String contents, User user, Todo todo) {

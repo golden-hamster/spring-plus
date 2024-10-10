@@ -1,6 +1,7 @@
 package org.example.expert.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.expert.config.PasswordEncoder;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.image.infrastructure.ImageUtil;
@@ -9,9 +10,12 @@ import org.example.expert.domain.user.dto.request.UserUpdateRequest;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.example.expert.util.HashUtil;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,7 +31,10 @@ public class UserService {
     }
 
     public UserResponse searchUser(String nickname) {
-        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
+//        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
+        Long nicknameHash = HashUtil.generateNicknameHash(nickname);
+        log.info("nicknameHash = {}", nicknameHash);
+        User user = userRepository.findByNickname(nickname, nicknameHash).orElseThrow(() -> new InvalidRequestException("User not found"));
         return new UserResponse(user.getId(), user.getEmail());
     }
 
@@ -60,7 +67,9 @@ public class UserService {
             imageUtil.deleteOriginalImage(originalImageUrl);
         }
 
-        user.updateNickname(userUpdateRequest.getNickname());
+        String nickname = userUpdateRequest.getNickname();
+        Long nicknameHash = HashUtil.generateNicknameHash(nickname);
+        user.updateNickname(nickname, nicknameHash);
         user.updateImageUrl(userUpdateRequest.getImageUrl());
     }
 

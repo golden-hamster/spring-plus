@@ -13,6 +13,7 @@ import org.example.expert.domain.image.service.ImageService;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.enums.UserRole;
 import org.example.expert.domain.user.repository.UserRepository;
+import org.example.expert.util.HashUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,10 +38,13 @@ public class AuthService {
 
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
 
+        Long nicknameHash = HashUtil.generateNicknameHash(signupRequest.getNickname());
+
         User newUser = new User(
                 signupRequest.getEmail(),
                 encodedPassword,
                 signupRequest.getNickname(),
+                nicknameHash,
                 userRole,
                 signupRequest.getImageUrl()
         );
@@ -64,4 +68,6 @@ public class AuthService {
 
         return new SigninResponse(bearerToken);
     }
+
+
 }

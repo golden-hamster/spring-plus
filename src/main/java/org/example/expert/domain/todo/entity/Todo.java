@@ -24,7 +24,7 @@ public class Todo extends Timestamped {
     private String weather;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "none"), updatable = false, nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
