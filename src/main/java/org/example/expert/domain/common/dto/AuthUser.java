@@ -15,14 +15,12 @@ public class AuthUser implements UserDetails {
 
     private final Long id;
     private final String email;
-    private final String password;
     private final String nickname;
     private final UserRole userRole;
 
-    public AuthUser(Long id, String email, String password, String nickname, UserRole userRole) {
+    public AuthUser(Long id, String email, String nickname, UserRole userRole) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.nickname = nickname;
         this.userRole = userRole;
     }
@@ -41,7 +39,7 @@ public class AuthUser implements UserDetails {
     }
 
     @Override
-    public String getPassword() {return password;}
+    public String getPassword() {return null;}
 
     @Override
     public String getUsername() {return email;}

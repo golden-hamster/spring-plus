@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.ServerException;
@@ -71,6 +72,10 @@ public class JwtUtil {
         String userRole = claims.get("userRole", String.class);
         String nickname = claims.get("nickname", String.class);
 
-        return new AuthUser(userId, email, null, nickname, UserRole.valueOf(userRole));
+        return new AuthUser(userId, email, nickname, UserRole.valueOf(userRole));
+    }
+
+    public String getTokenFromRequest(HttpServletRequest request) {
+        return request.getHeader("Authorization");
     }
 }
