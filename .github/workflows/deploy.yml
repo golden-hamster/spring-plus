@@ -51,7 +51,7 @@ jobs:
 
       - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
         run: aws deploy create-deployment
-          --application-name spring-plus
+          --application-name spring-plus-server
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name Production
           --s3-location bucket=spring-plus,bundleType=tgz,key=$GITHUB_SHA.tar.gz
