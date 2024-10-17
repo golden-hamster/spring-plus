@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Getter
-public class ImageFile {//.
+public class ImageFile {//..
 
     private final MultipartFile file;
     private final String uniqueName;
