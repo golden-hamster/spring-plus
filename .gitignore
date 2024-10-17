@@ -41,3 +41,8 @@ out/
 
 # Docker Compose files
 docker-compose.yml
+
+application.yml
+application.develop.yml
+applicaion-prod.yml
+src/main/resources/application-prod.yml
