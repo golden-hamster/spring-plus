@@ -2,7 +2,7 @@ version: 0.8
 os: linux
 
 files:
-  - source: /
+  - source: .
     destination: /home/ubuntu/spring-plus
 
 permissions:
