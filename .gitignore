@@ -37,7 +37,6 @@ out/
 .vscode/
 
 ### properties ###
-*.properties
 
 # Docker Compose files
 docker-compose.yml
